@@ -106,6 +106,19 @@ def delete_pdf(req: DeleteRequest):
         "deleted": len(ids_to_delete)
     }
 
+# List Documents
+@app.get("/documents")
+def list_documents():
+    data = db.get()
+    names = []
+
+    for meta in data.get("metadatas", []):
+        name = meta.get("source") if meta else None
+        if name and name not in names:
+            names.append(name)
+
+    return {"documents": names}
+
 # Chat Endpoint
 @app.post("/chat")
 def chat(req: ChatRequest):
